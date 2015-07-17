@@ -1,7 +1,7 @@
 // TODO: proper module / constructor etc
 
 // TODO: build N layers dynamically
-var NL = 30   // number of layers
+var NL = 90   // number of layers
 var BW = 200  // base width
 var BH = 200  // base height
 
@@ -62,6 +62,7 @@ function str_for_layer(n) {
   var list = empty_list(size)
   for(var i = 0; i < data.length; i++) {
     var index = Math.floor((size[0]+1) * Math.floor(data[i][1]) + data[i][0])
+    // if(list[index] == '.') console.error('repeat')
     list[index] = '.'
   }
   return strcat(list)
@@ -137,7 +138,7 @@ document.addEventListener('DOMContentLoaded', function() {
     render_layer(i)
   }
 
-  el('body').addEventListener('mouseover', function(e) {
+  el('body').addEventListener('mousemove', function(e) {
     skew_layers(e.clientX, e.clientY)
   })
 })
@@ -146,7 +147,7 @@ function sierp() {
   var vs = [ [0,0,0], [200,0,0], [100,200,0], [100,100,  NL-1  ] ]
   var point = [100, 100, 0]
 
-  for(var i = 0; i < 30000; i++) {
+  for(var i = 0; i < 300000; i++) {
     add(point)
     point = halfway(point, rand(vs))
   }
