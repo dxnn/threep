@@ -1,9 +1,9 @@
 // TODO: proper module / constructor etc
 
 // TODO: build N layers dynamically
-var NL = 9   // number of layers
-var BW = 40  // base width
-var BH = 40  // base height
+var NL = 30   // number of layers
+var BW = 200  // base width
+var BH = 200  // base height
 
 var data = [] // TODO: package point database seperately
 
@@ -61,7 +61,7 @@ function str_for_layer(n) {
   var size = layer_size(n)
   var list = empty_list(size)
   for(var i = 0; i < data.length; i++) {
-    var index = (size[0]+1) * data[i][1] + data[i][0]
+    var index = Math.floor((size[0]+1) * Math.floor(data[i][1]) + data[i][0])
     list[index] = '.'
   }
   return strcat(list)
@@ -91,31 +91,75 @@ function render_layer(n) {
   layer_els[n].textContent = str_for_layer(n)
 }
 
-var layer_els = []
-var el = document.getElementById.bind(document)
-
-
-function init() {
+function skew_layers(l, t) {
   for(var i = 0; i < NL; i++) {
-    var layer = el('layer_'+(i+1))
-    layer_els[i] = layer
-    layer.style.fontSize = (NL+8-i) + 'px'
-  }
-
-  for(x = 10; x < 30; x++) {
-    for(y = 15; y < 25; y++) {
-      for(z = 0; z < 10; z++) {
-        add_point(x, y, z)
-        // add_point(x, y, 3)
-        // add_point(x, y+10, 2)
-      }
-    }
+    var layer = layer_els[i]
+    layer.style.top  = i * (t / (NL+1)) + 'px'
+    layer.style.left = i * (l / (NL+1)) + 'px'
   }
 }
 
-document.onreadystatechange = function() {
+var layer_els = []
+var el = document.getElementById.bind(document)
+
+function init() {
+  var canvas = el('canvas')
+  for(var i = 0; i < NL; i++) {
+    // TODO: make layer here
+    var pre = document.createElement('pre')
+    pre.id = el('layer_'+(i+1))
+    canvas.appendChild(pre)
+    layer_els[i] = pre
+    // var layer = el('layer_'+(i+1))
+    // layer_els[i] = layer
+    // layer.style.top  = i + 'px'
+    // layer.style.left = i + 'px'
+    // layer.style.fontSize = (NL+8-i) + 'px'
+  }
+
+  // z = 1
+
+  // for(x = 10; x < 30; x++) {
+  //   for(y = 15; y < 25; y++) {
+  //     // for(z = 0; z < 10; z++) {
+  //       add_point(x, y, z)
+  //       // add_point(x, y, 3)
+  //       // add_point(x, y+10, 2)
+  //     // }
+  //   }
+  // }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
   init()
+  sierp()
   for(var i = 0; i < NL; i++) {
     render_layer(i)
+  }
+
+  el('body').addEventListener('mouseover', function(e) {
+    skew_layers(e.clientX, e.clientY)
+  })
+})
+
+function sierp() {
+  var vs = [ [0,0,0], [200,0,0], [100,200,0], [100,100,  NL-1  ] ]
+  var point = [100, 100, 0]
+
+  for(var i = 0; i < 30000; i++) {
+    add(point)
+    point = halfway(point, rand(vs))
+  }
+
+  function add(p) {
+    add_point(p[0], p[1], p[2])
+  }
+
+  function halfway(p1, p2) {
+    return [ (p1[0]+p2[0])/2, (p1[1]+p2[1])/2, (p1[2]+p2[2])/2 ]
+  }
+
+  function rand(list) {
+    return list[Math.floor(Math.random() * list.length)]
   }
 }
