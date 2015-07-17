@@ -1,7 +1,7 @@
 // TODO: proper module / constructor etc
 
 // TODO: build N layers dynamically
-var NL = 90   // number of layers
+var NL = 30   // number of layers
 var BW = 200  // base width
 var BH = 200  // base height
 
