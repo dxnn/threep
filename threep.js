@@ -2,8 +2,8 @@
 
 // TODO: build N layers dynamically
 var NL = 30   // number of layers
-var BW = 200  // base width
-var BH = 200  // base height
+var BW = 300  // base width
+var BH = 300  // base height
 
 var data = [] // TODO: package point database seperately
 
@@ -14,6 +14,10 @@ function add_point(x, y, z) {
 
 function remove_point(x, y, z) {
   // TODO
+}
+
+function clear_points() {
+  data = []
 }
 
 function select_points(fun) {
@@ -43,9 +47,9 @@ function selector(lx, hx, ly, hy, lz, hz) {
       var y = d[1]
       var z = d[2]
 
-      if(lx !== null && (lx > x || hx < x)) continue;
-      if(ly !== null && (ly > y || hy < y)) continue;
-      if(lz !== null && (lz > z || hz < z)) continue;
+      if(lx !== null && (lx > x || hx <= x)) continue;
+      if(ly !== null && (ly > y || hy <= y)) continue;
+      if(lz !== null && (lz > z || hz <= z)) continue;
 
       acc.push(d)
     }
@@ -70,7 +74,7 @@ function str_for_layer(n) {
 
 function strcat(list) {
   var str = ""
-  for(var i = 0; i < list.length; i++) 
+  for(var i = 0; i < list.length; i++)
     str += list[i]
   return str
 }
@@ -144,7 +148,8 @@ document.addEventListener('DOMContentLoaded', function() {
 })
 
 function sierp() {
-  var vs = [ [0,0,0], [200,0,0], [100,200,0], [100,100,  NL-1  ] ]
+  // var vs = [ [0,0,0], [200,0,0], [100,200,0], [100,100,  NL-1  ] ]
+  var vs = [ [0,0,0], [200,0,0], [0,200,0], [300,200,0]]
   var point = [100, 100, 0]
 
   for(var i = 0; i < 300000; i++) {
